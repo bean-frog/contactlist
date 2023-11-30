@@ -1,0 +1,18 @@
+{
+  "name": "contactlist",
+  "version": "1.0.0",
+  "description": "apcsp contact list project written in javascript. includes server side storage using Express and NodeJS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "beanfrog",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "tailwindcss": "^3.3.5"
+  },
+  "devDependencies": {
+    "daisyui": "^4.4.10"
+  }
+}
