@@ -103,19 +103,36 @@ app.post('/user4', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-app.post('/deleteAll', async (req, res) => {
+app.delete('/delete', async (req, res) => {
   try {
-    if (!req.body) {
-      return res.status(400).json({error: "no data provided in req.body"})
-    } 
-    console.log(user);
-    const filename = path.join(__dirname, 'data/' + req.body.user + '.json');
-  } catch (error) {
-    console.error('idk error doing stuff, you fucked up dumbass')
-  }
+    const requestData = req.body;
 
-})
+    if (!requestData.file || !requestData.name || !requestData.phone || !requestData.email || !requestData.address) {
+      return res.status(400).json({ error: 'All fields (file, name, phone, email, address) are required in the request body.' });
+    }
+
+    const filePath = requestData.file;
+    const data = await fs.readFile(filePath, 'utf-8');
+    const jsonData = JSON.parse(data);
+
+    // Find and remove the entry with the specified data
+    const updatedData = jsonData.filter(entry => {
+      return (
+        entry.name !== requestData.name ||
+        entry.phone !== requestData.phone ||
+        entry.email !== requestData.email ||
+        entry.address !== requestData.address
+      );
+    });
+
+    await fs.writeFile(filePath, JSON.stringify(updatedData, null, 2), 'utf-8');
+
+    res.json({ success: true, message: `Data for "${requestData.name}" deleted successfully.` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 app.listen(PORT, () => {

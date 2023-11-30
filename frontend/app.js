@@ -53,6 +53,7 @@ function copyToClipboard(text) {
 }
 
 function fetchJson(user) {
+  document.getElementById('list').innerHTML = ''
   let url = '/' + user + '.json';
    fetch(url, {
     method: 'GET'
@@ -96,7 +97,8 @@ function appendCard(contactData) {
   let data = JSON.parse(JSON.stringify(contactData));
   let cbVals = [contactData.name,contactData.phone,contactData.email,contactData.address]
   document.getElementById('list').innerHTML += `
-    <div class="bg-stone-300 p-2 m-2 w-full h-fit">
+    <div class="p-2 m-2 w-full bg-stone-300 h-fit">
+    <button onclick="deleteData('data/${currentUser}.json', '${cbVals}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fas fa-trash"></i></button>
       <button onclick="copyToClipboard('${cbVals}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fa-regular fa-copy"></i></button>
       <h1 class="text-xl text-black" onclick="copyToClipboard(this.textContent)">${contactData.name}</h1>
       <h1 class="text-l text-stone-700">Phone: ${contactData.phone}</h1>
@@ -129,8 +131,9 @@ async function addItem() {
   });
   if (formValues) {
   document.getElementById('list').innerHTML += `
-    <div class="bg-stone-300 p-2 m-2 w-full h-fit">
-      <button onclick="list.copyToClipboard('${formValues}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fa-regular fa-copy"></i></button>
+    <div class="p-2 my-2 w-full bg-stone-300 h-fit">
+      <button onclick="deleteData('data/${currentUser}.json', '${formValues}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fas fa-trash"></i></button>
+      <button onclick="copyToClipboard('${formValues}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fa-regular fa-copy"></i></button>
       <h1 class="text-xl text-black">${formValues[0]}</h1>
       <h1 class="text-l text-stone-700">Phone: ${formValues[1]}</h1>
       <h1 class="text-l text-stone-700">Email: ${formValues[2]}</h1>
@@ -171,23 +174,36 @@ document.getElementById('btn-add').addEventListener('click', function () {
   addItem();
 });
 
-document.getElementById('btn-delAll').addEventListener('click', clearAll(currentUser));
 
-function clearAll(user) {
-  const userid = switch (user)
-    fetch('/deleteAll', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json', 
-  },
-  body: {"user": userid},
-})
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-  
-}
+const deleteData = async (file, userData) => {
+  const [name, phone, email, address] = userData.split(',');
+
+  const endpoint = '/delete';
+  const requestData = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      file: file,
+      name: name,
+      phone: phone,
+      email: email,
+      address: address,
+    }),
+  };
+
+  try {
+    const response = await fetch(endpoint, requestData);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    console.log(responseData);
+    fetchJson(currentUser)
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+};

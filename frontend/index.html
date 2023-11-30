@@ -6,31 +6,65 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-	<div id="thoushallnotpass" class="h-screen w-screen bg-white fixed flex items-center justify-center">
-		<div class="bg-stone-200 h-fit w-1/4 p-6 rounded-md flex flex-col">
+	<style>
+		/* WebKit (Chrome, Safari) */
+		::-webkit-scrollbar {
+		  width: 6px;
+		}
+	  
+		::-webkit-scrollbar-thumb {
+		  background-color: transparent;
+		  border-radius: 8px;
+		}
+	  
+		/* Firefox */
+		/* Firefox 64 and later */
+		body {
+		  scrollbar-width: thin;
+		  scrollbar-color: transparent transparent;
+		}
+	  
+		/* Firefox 63 and earlier */
+		body {
+		  scrollbar-color: transparent transparent;
+		}
+	  
+		/* Microsoft Edge and IE */
+		body {
+		  -ms-overflow-style: none;
+		  scrollbar-width: thin;
+		  scrollbar-color: transparent transparent;
+		}
+	  </style>
+	  
+	  
+	<div id="thoushallnotpass" class="flex fixed justify-center items-center w-screen h-screen bg-white">
+		<div class="flex flex-col p-6 w-1/4 rounded-md bg-stone-200 h-fit">
 			<h1 class="text-lg text-black">Login</h1>
-			<select id="login-username" class="p-2 m-1 bg-white">
+			<select id="login-username" class="p-2 m-1 text-black bg-white">
 					<option selected value="Bob">Bob</option>
 					<option value="Joe">Joe</option>
 					<option value="John">John</option>
 					<option value="Tanish Gaglani">Tanish Gaglani</option>
 				</select>
-					<input id="login-password" type="password"class="p-2 m-1" placeholder="Password">
-			<button onclick="checkLogin()" class="bg-stone-300 p-4 w-full rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Log In</button>
+					<input id="login-password" type="password"class="p-2 m-1 text-black bg-white" placeholder="Password">
+			<button onclick="checkLogin()" class="bg-stone-300 p-4 w-full text-black rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Log In</button>
 		</div>
 	</div>
-	<div id="wrapper" class="h-screen w-screen flex items-center justify-center">
-		<div id="menus" class="h-fit w-1/4">
-			<div id="list" class="bg-stone-200 p-6 pt-24 w-full h-[500px] overflow-y-scroll space-y-4 space-y-reverse flex flex-col items-center justify-center">
-</div>
+	<div id="wrapper" class="flex justify-center items-center w-screen h-screen">
+		<div id="menus" class="w-1/4 h-fit">
+			<div id="list" class="flex overflow-y-auto flex-col p-4 mx-auto h-96 bg-white overflow-x-clip">
+				<!-- Your dynamically appended cards go here -->
+			  </div>
+			  
 
-			<div id="buttons" class="bg-stone-200 p-6 w-full h-fit flex flex-row items-center justify-center">
-				<button id="btn-add" class="bg-stone-300 p-4 w-full rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Add</button>
-				<button id="btn-search" class="bg-stone-300 w-full p-4 rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Search</button>
-				<button id="btn-delAll" class="bg-stone-300 w-full p-4 rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Delete All</button>
+			<div id="buttons" class="flex flex-row justify-center items-center p-6 w-full bg-stone-200 h-fit">
+				<button id="btn-add" class="bg-stone-300 text-black p-4 w-full rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Add</button>
+				<button id="btn-search" class="bg-stone-300 text-black w-full p-4 rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Search</button>
+				<button id="btn-delAll" class="bg-stone-300 text-black w-full p-4 rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Delete All</button>
 			</div>
-			<div class="bg-stone-200 flex flex-row items-center justify-center">
-				<button onclick="document.getElementById('thoushallnotpass').classList.remove('hidden')"class="bg-stone-300 w-1/2 p-4 rounded-lg shadow-md shadow-stone-500 m-4 mt-2 hover:scale-[1.01] active:scale-[0.95]">Logout <span id="currentuser"></span></button>
+			<div class="flex flex-row justify-center items-center bg-stone-200">
+				<button onclick="document.getElementById('thoushallnotpass').classList.remove('hidden')"class="bg-stone-300 w-1/2 p-4 rounded-lg shadow-md text-black shadow-stone-500 m-4 mt-2 hover:scale-[1.01] active:scale-[0.95]">Logout <span id="currentuser"></span></button>
 			</div>
 		</div>
 
