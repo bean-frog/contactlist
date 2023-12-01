@@ -115,7 +115,6 @@ app.delete('/delete', async (req, res) => {
     const data = await fs.readFile(filePath, 'utf-8');
     const jsonData = JSON.parse(data);
 
-    // Find and remove the entry with the specified data
     const updatedData = jsonData.filter(entry => {
       return (
         entry.name !== requestData.name ||
@@ -134,6 +133,18 @@ app.delete('/delete', async (req, res) => {
   }
 });
 
+app.delete('/deleteAll', async (req, res) => {
+  try {
+    const filepath = req.body.file;
+    let data = await fs.readFile(filepath, 'utf-8');
+    data = [];
+    await fs.writeFile(filepath, JSON.stringify(data))
+    res.json({ success: true, message: `deleted everything` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

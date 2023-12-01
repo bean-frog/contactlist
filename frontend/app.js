@@ -16,21 +16,25 @@ function checkLogin() {
                 fetchJson('user1');
                 document.getElementById('thoushallnotpass').classList.add('hidden');
                 currentUser = 'user1';
+                updateDelAll();
               return;
               case "Joe":
                 fetchJson('user2');
                 document.getElementById('thoushallnotpass').classList.add('hidden');
                 currentUser = 'user2';
+                updateDelAll();
               return;
               case "John":
                 fetchJson('user3');
                 document.getElementById('thoushallnotpass').classList.add('hidden');
                 currentUser = 'user3';
+                updateDelAll();
               return;
               case "Tanish Gaglani":
                 fetchJson('user4');
                 document.getElementById('thoushallnotpass').classList.add('hidden');
                 currentUser = 'user4';
+                updateDelAll();
               return;
               default:
               return;
@@ -62,13 +66,17 @@ function fetchJson(user) {
   .then(response => response.json())
   .then(data => {
     console.log('Success:', data);
+    localStorage.setItem('cl-cache', JSON.stringify(data))
      data.forEach(item => {
       appendCard(item);
     });
+
   })
+
 }
 
 function switchUser(newUser) {
+  document.getElementById('search').value = ''
   switch (newUser) {
   case "user1":
     currentUser = 'user1';
@@ -97,9 +105,9 @@ function appendCard(contactData) {
   let data = JSON.parse(JSON.stringify(contactData));
   let cbVals = [contactData.name,contactData.phone,contactData.email,contactData.address]
   document.getElementById('list').innerHTML += `
-    <div class="p-2 m-2 w-full bg-stone-300 h-fit">
-    <button onclick="deleteData('data/${currentUser}.json', '${cbVals}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fas fa-trash"></i></button>
-      <button onclick="copyToClipboard('${cbVals}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fa-regular fa-copy"></i></button>
+    <div class="contact p-2 m-2 w-full bg-stone-300 h-fit relative">
+    <button onclick="deleteData('data/${currentUser}.json', '${cbVals}')" class="text-red-500 absolute top-2 right-2 bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fas fa-trash"></i></button>
+      <button onclick="copyToClipboard('${cbVals}')" class="absolute top-2 right-10 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fa-regular fa-copy"></i></button>
       <h1 class="text-xl text-black" onclick="copyToClipboard(this.textContent)">${contactData.name}</h1>
       <h1 class="text-l text-stone-700">Phone: ${contactData.phone}</h1>
       <h1 class="text-l text-stone-700">Email: ${contactData.email}</h1>
@@ -131,9 +139,9 @@ async function addItem() {
   });
   if (formValues) {
   document.getElementById('list').innerHTML += `
-    <div class="p-2 my-2 w-full bg-stone-300 h-fit">
-      <button onclick="deleteData('data/${currentUser}.json', '${formValues}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fas fa-trash"></i></button>
-      <button onclick="copyToClipboard('${formValues}')" class="bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fa-regular fa-copy"></i></button>
+    <div class="contact p-2 my-2 w-full bg-stone-300 h-fit relative">
+      <button onclick="deleteData('data/${currentUser}.json', '${formValues}')" class="text-red-500 absolute top-2 right-2 bg-stone-300 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fas fa-trash"></i></button>
+      <button onclick="copyToClipboard('${formValues}')" class="absolute top-2 right-10 m-2 hover:scale-[1.01] active:scale-[0.95]"><i class="fa-regular fa-copy"></i></button>
       <h1 class="text-xl text-black">${formValues[0]}</h1>
       <h1 class="text-l text-stone-700">Phone: ${formValues[1]}</h1>
       <h1 class="text-l text-stone-700">Email: ${formValues[2]}</h1>
@@ -207,3 +215,74 @@ const deleteData = async (file, userData) => {
     console.error('Error:', error.message);
   }
 };
+const deleteAllData = async (file) => {
+
+  const endpoint = '/deleteAll';
+  const requestData = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      file: file,
+    }),
+  };
+  try {
+    const response = await fetch(endpoint, requestData);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const responseData = await response.json();
+    console.log(responseData);
+    document.getElementById('list').innerHTML = '';
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+};
+
+document.getElementById('search').addEventListener('input', function () {
+  let list = document.getElementById('list');
+  let nodes = document.querySelectorAll('.contact');
+  let query = this.value.replace(" ", "");
+  nodes.forEach(node => {
+    let txt = node.innerText.toLowerCase().trim().replace(" ", "");
+    if (txt.includes(query)) {
+      node.classList.add('bg-emerald-200');
+      node.classList.remove('bg-stone-300')
+    } else {
+      node.classList.remove('bg-emerald-200');
+      node.classList.add('bg-stone-300')
+    }
+    if (query === "") {
+      node.classList.remove('bg-emerald-200');
+      node.classList.add('bg-stone-300')
+    }
+  });
+  rearrangeNodes();
+});
+function rearrangeNodes() {
+  const list = document.getElementById('list');
+  const contacts = Array.from(list.children);
+  contacts.sort((a, b) => {
+    const hasClassA = a.classList.contains('bg-emerald-200');
+    const hasClassB = b.classList.contains('bg-emerald-200');
+    if (hasClassA && !hasClassB) {
+      return -1;
+    } else if (!hasClassA && hasClassB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+  list.innerHTML = '';
+  contacts.forEach(contact => list.appendChild(contact));
+}
+function updateDelAll() {
+  if (listener) {
+    document.removeEventListener(listener)
+  }
+var listener = document.getElementById('btn-delAll').addEventListener('click', function() {
+  deleteAllData('data/' + currentUser + '.json');
+})
+}
+updateDelAll();

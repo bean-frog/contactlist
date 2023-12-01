@@ -6,39 +6,9 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-	<style>
-		/* WebKit (Chrome, Safari) */
-		::-webkit-scrollbar {
-		  width: 6px;
-		}
+
 	  
-		::-webkit-scrollbar-thumb {
-		  background-color: transparent;
-		  border-radius: 8px;
-		}
-	  
-		/* Firefox */
-		/* Firefox 64 and later */
-		body {
-		  scrollbar-width: thin;
-		  scrollbar-color: transparent transparent;
-		}
-	  
-		/* Firefox 63 and earlier */
-		body {
-		  scrollbar-color: transparent transparent;
-		}
-	  
-		/* Microsoft Edge and IE */
-		body {
-		  -ms-overflow-style: none;
-		  scrollbar-width: thin;
-		  scrollbar-color: transparent transparent;
-		}
-	  </style>
-	  
-	  
-	<div id="thoushallnotpass" class="flex fixed justify-center items-center w-screen h-screen bg-white">
+	<div id="thoushallnotpass" class="z-50 flex fixed justify-center items-center w-screen h-screen bg-white">
 		<div class="flex flex-col p-6 w-1/4 rounded-md bg-stone-200 h-fit">
 			<h1 class="text-lg text-black">Login</h1>
 			<select id="login-username" class="p-2 m-1 text-black bg-white">
@@ -53,18 +23,19 @@
 	</div>
 	<div id="wrapper" class="flex justify-center items-center w-screen h-screen">
 		<div id="menus" class="w-1/4 h-fit">
-			<div id="list" class="flex overflow-y-auto flex-col p-4 mx-auto h-96 bg-white overflow-x-clip">
+			<div id="list" class="flex overflow-y-auto flex-col p-4 mx-auto h-96 bg-stone-200 overflow-x-clip">
 				<!-- Your dynamically appended cards go here -->
 			  </div>
 			  
-
-			<div id="buttons" class="flex flex-row justify-center items-center p-6 w-full bg-stone-200 h-fit">
+			  <div class="flex flex-row justify-center items-center w-full bg-stone-200 h-fit">
+			  	<input id="search" class="w-full p-2 m-4 text-black bg-white" placeholder="Search by name, phone, email, or address">
+			  </div>
+			<div id="buttons" class="flex flex-row justify-center items-center p-6 pt-0 w-full bg-stone-200 h-fit">
 				<button id="btn-add" class="bg-stone-300 text-black p-4 w-full rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Add</button>
-				<button id="btn-search" class="bg-stone-300 text-black w-full p-4 rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Search</button>
 				<button id="btn-delAll" class="bg-stone-300 text-black w-full p-4 rounded-lg shadow-md shadow-stone-500 m-2 hover:scale-[1.01] active:scale-[0.95]">Delete All</button>
 			</div>
 			<div class="flex flex-row justify-center items-center bg-stone-200">
-				<button onclick="document.getElementById('thoushallnotpass').classList.remove('hidden')"class="bg-stone-300 w-1/2 p-4 rounded-lg shadow-md text-black shadow-stone-500 m-4 mt-2 hover:scale-[1.01] active:scale-[0.95]">Logout <span id="currentuser"></span></button>
+				<button onclick="document.getElementById('thoushallnotpass').classList.remove('hidden'); document.getElementById('search').value = ''"class="bg-stone-300 w-1/2 p-4 rounded-lg shadow-md text-black shadow-stone-500 m-4 mt-2 hover:scale-[1.01] active:scale-[0.95]">Logout <span id="currentuser"></span></button>
 			</div>
 		</div>
 
